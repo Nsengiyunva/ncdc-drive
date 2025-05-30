@@ -22,7 +22,7 @@ function App() {
   const [dark, setDark] = useState(false)
   const darkTheme = createTheme({
     palette: {
-      mode: dark ? 'dark' : 'dark',
+      mode: dark ? 'dark' : 'light',
     },
   });
 
