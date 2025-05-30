@@ -22,7 +22,7 @@ function App() {
   const [dark, setDark] = useState(false)
   const darkTheme = createTheme({
     palette: {
-      mode: dark ? 'dark' : 'light',
+      mode: dark ? 'dark' : 'dark',
     },
   });
 
@@ -33,17 +33,18 @@ function App() {
   const [loading, setLoading] = useState(false)
 
   const newFolderCreate = (name) => {
-    axios.post(`${url}/ff/addfolder`, {
-      folderid: currentFolder,
-      newfoldername: name,
-      uid: auth.uid
-    })
-      .then(function (response) {
-        setrender((prev) => !prev)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    console.log( "name", name )
+    // axios.post(`${url}/ff/addfolder`, {
+    //   folderid: currentFolder,
+    //   newfoldername: name,
+    //   uid: auth.uid
+    // })
+    //   .then(function (response) {
+    //     setrender((prev) => !prev)
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   }
   console.debug(render)
 
