@@ -32,8 +32,8 @@ function App() {
   const [render, setrender] = useState(true)
   const [loading, setLoading] = useState(false)
 
-  const newFolderCreate = (name) => {
-    console.log( "name", name )
+  const newFolderCreate = name => {
+    console.log( "xx1", name );
     // axios.post(`${url}/ff/addfolder`, {
     //   folderid: currentFolder,
     //   newfoldername: name,
@@ -48,9 +48,8 @@ function App() {
   }
   console.debug(render)
 
-  const fileUpload = (file) => {
-    upload(file);
-  }
+  const fileUpload = file => upload(file);
+
   function upload(file) {
     if (!file) return;
     setLoading(true)
