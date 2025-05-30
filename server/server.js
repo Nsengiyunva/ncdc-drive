@@ -22,5 +22,5 @@ app.use('/user',user)
 app.use('/ff',ffroute)
 
 app.listen(process.env.PORT || 8500,()=>{
-    console.log('server running');
+    console.log('Server is running...');
 })
