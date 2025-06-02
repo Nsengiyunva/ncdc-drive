@@ -39,7 +39,7 @@ export const Home = () => {
         .then(function (response) {
           setFiles(response.data.files)
           setFolders(response.data.folders)
-          console.log(response.data);
+          // console.log(response.data);
         })
         .catch(function (error) {
           console.log(error);
@@ -87,10 +87,12 @@ export const Home = () => {
       <Selection setGrid={handleGrid} grid={grid} value={params.page} />
       {
         grid ? <div className="gridbox">
-          <div className="files" >
+          <div className="files">
             {
               (home && folders && folders.length !== 0) ?
-                <p style={{ marginBottom: '20px', marginTop: '35px', fontSize: '14px' }}>Folders</p> : <></>
+                <p style={{ marginBottom: '20px', marginTop: '35px', fontSize: '14px' }}>
+                  {`Folders`}
+                </p> : <></>
             }
             <div className='grid'>
               {
@@ -103,7 +105,9 @@ export const Home = () => {
           <div className="files">
             {
               files?.length !== 0 ?
-                <p style={{ marginBottom: '5px', marginTop: '35px', fontSize: '14px' }}>Files</p> : <></>
+                <p style={{ marginBottom: '5px', marginTop: '35px', fontSize: '14px' }}>
+                  {`Files`}
+                </p> : <></>
             }
             <div className='grid'>
               {

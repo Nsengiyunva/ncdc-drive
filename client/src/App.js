@@ -53,39 +53,57 @@ function App() {
   function upload(file) {
     if (!file) return;
     setLoading(true)
-    const storageRef = ref(storage, 'files/' + file.name);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-      },
-      (e) => {
-        console.log(e);
-        setLoading(false)
 
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          axios.post(`${url}/ff/addfile`,
-            {
-              folderid: currentFolder,
-              filename: file.name,
-              storageLink: downloadURL,
-              uid: auth.uid,
-              filetype: file.type
-            }
-          )
-            .then(function (response) {
-              setrender((prev) => !prev)
-              setLoading(false)
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        });
+    axios.post(`${url}/ff/addfile`,
+      {
+        folderid: currentFolder,
+        filename: file.name,
+        storageLink: "na",
+        uid: auth.uid,
+        filetype: file.type
       }
-    );
+    )
+      .then(function (response) {
+        setrender((prev) => !prev)
+        setLoading(false)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    // const storageRef = ref(storage, 'files/' + file.name);
+    // const uploadTask = uploadBytesResumable(storageRef, file);
+    // uploadTask.on('state_changed',
+    //   (snapshot) => {
+    //     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //     console.log('Upload is ' + progress + '% done');
+    //   },
+    //   (e) => {
+    //     console.log(e);
+    //     setLoading(false)
+
+    //   },
+    //   () => {
+    //     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //       axios.post(`${url}/ff/addfile`,
+    //         {
+    //           folderid: currentFolder,
+    //           filename: file.name,
+    //           storageLink: downloadURL,
+    //           uid: auth.uid,
+    //           filetype: file.type
+    //         }
+    //       )
+    //         .then(function (response) {
+    //           setrender((prev) => !prev)
+    //           setLoading(false)
+    //         })
+    //         .catch(function (error) {
+    //           console.log(error);
+    //         });
+    //     });
+      // }
+    // );
   }
 
   const ContextValue = {

@@ -96,7 +96,7 @@ export const Leftbar = () => {
                 }
                 style={{ marginLeft: '22px', display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: '7px', marginTop: '7px', textDecoration: 'none', height: '35px', paddingLeft: '9px', borderRadius: '3px 25px 25px 3px', textDecorationColor: 'none', color: 'inherit',fontSize:'12.5px' }}>
                 <AddToDriveOutlinedIcon style={{ width: '23px', height: '22px', marginRight: '15px' }} />
-                My Drive
+                {`My NCDC Repository`}
             </NavLink>
             <NavLink
                 className={({ isActive }) =>
