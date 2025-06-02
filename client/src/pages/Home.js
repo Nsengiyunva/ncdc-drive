@@ -39,7 +39,7 @@ export const Home = () => {
         .then(function (response) {
           setFiles(response.data.files)
           setFolders(response.data.folders)
-          // console.log(response.data);
+          console.log(response.data);
         })
         .catch(function (error) {
           console.log(error);

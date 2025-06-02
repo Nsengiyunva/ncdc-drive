@@ -3,9 +3,10 @@ require('dotenv').config()
 const user=require('./routes/User')
 const ffroute=require('./routes/FilesAndFolders')
 const mongoose=require('mongoose')
+const cors = require( "cors" );
 
 const app=express()
-app.use(require('cors')())
+app.use(cors())
 app.use(express.json())
 
 mongoose.connect(  process.env.MONGO_URL  ).then(()=>  {
