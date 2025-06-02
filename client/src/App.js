@@ -34,17 +34,17 @@ function App() {
 
   const newFolderCreate = name => {
     console.log( "xx1", name );
-    // axios.post(`${url}/ff/addfolder`, {
-    //   folderid: currentFolder,
-    //   newfoldername: name,
-    //   uid: auth.uid
-    // })
-    //   .then(function (response) {
-    //     setrender((prev) => !prev)
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
+    axios.post(`${url}/ff/addfolder`, {
+      folderid: currentFolder,
+      newfoldername: name,
+      uid: auth.uid
+    })
+      .then(function (response) {
+        setrender((prev) => !prev)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
   console.debug(render)
 
