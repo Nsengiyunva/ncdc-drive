@@ -9,7 +9,8 @@ const firebaseConfig = {
     projectId: "ncdc-86101",
     storageBucket: "ncdc-86101.firebasestorage.app",
     messagingSenderId: "552527577326",
-    appId: "1:552527577326:web:8433e3b0bc8b8fc5b1f3ff"
+    appId: "1:552527577326:web:8433e3b0bc8b8fc5b1f3ff",
+    authDomain: "repository.ncdc.go.ug"
   };
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
