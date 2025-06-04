@@ -15,7 +15,7 @@ exports.uploadFile = async( req, res )  => {
             size: req.file.size
         } );
 
-        await File.save();
+        await file.save();
         res.status( 201 ).json( file );
     } catch (err) {
         res.status( 500 ).json( { error: err.message } );

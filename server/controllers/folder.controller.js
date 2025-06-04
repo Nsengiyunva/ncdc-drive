@@ -8,7 +8,7 @@ exports.createFolder = async ( req, res ) => {
             parent: parent || null
         } )
 
-        await Folder.save();
+        await folder.save();
         res.status( 201 ).json( folder );
 
     } catch( err  )  {
