@@ -30,6 +30,7 @@ const express = require( "express" );
 const mongoose = require( "mongoose" );
 const dotenv = require( "dotenv" );
 const path = require( "path" );
+const listEndpoints = require('express-list-endpoints');
 
 dotenv.config();
 const app = express();
@@ -45,6 +46,8 @@ mongoose.connect(  process.env.MONGO_URL  ).then(()=>  {
 
 app.use('/api/folders', require('./routes/folder.routes'));
 app.use('/api/files', require('./routes/file.routes'));
+
+console.log(listEndpoints(app));
 
 const PORT = 8552;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
