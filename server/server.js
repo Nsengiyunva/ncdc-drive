@@ -38,14 +38,13 @@ app.use( express.json() );
 app.use( "/uploads", express.static(path.join(__dirname, 'uploads')) );
 
 mongoose.connect(  process.env.MONGO_URL  ).then(()=>  {
-    console.log("Connected to the db...");
-
-    app.use('/api/folders', require('./routes/folder.routes'));
-    app.use('/api/files', require('./routes/file.routes'));
-
-    const PORT = 8552;
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+    console.log("Connected to the Mongo DB...");
 }).catch(err=>{
     console.log(err);
-})
+});
+
+app.use('/api/folders', require('./routes/folder.routes'));
+app.use('/api/files', require('./routes/file.routes'));
+
+const PORT = 8552;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
