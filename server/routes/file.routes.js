@@ -6,17 +6,17 @@ const router = express.Router();
 
 const file_controller = require( "../controllers/file.controller"  );
 
-// const storage = multer.diskStorage( {
-//     destination: "uploads/",
-//     filename:  ( req, file, cb )  => {
-//         cb( null, `${Date.now()}-${file.originalname}`)
-//     }
-// } );
+const storage = multer.diskStorage( {
+    destination: "uploads/",
+    filename:  ( req, file, cb )  => {
+        cb( null, `${Date.now()}-${file.originalname}`)
+    }
+} );
 
-// const upload = multer( { storage } );
-const upload = multer({ dest: 'uploads/' });
+const upload = multer( { storage } );
+// const upload = multer({ dest: 'uploads/' });
 
-router.post('/upload', upload.single('file'), file_controller.uploadFile );
+router.post('/upload', upload.single('file'), file_controller.uploadFileUp );
 router.get( "/folder/:folderId", file_controller.getFiles );
 
 module.exports = router;
