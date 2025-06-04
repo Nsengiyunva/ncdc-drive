@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useDropzone } from 'react-dropzone';
 
-const API_BASE = 'http://localhost:5000/api'; // Change to match your API URL
+const API_BASE = 'https://apirepository.ncdc.go.ug/api'; // Change to match your API URL
 
 function FolderManager() {
   const [folders, setFolders] = useState([]);
@@ -15,37 +14,52 @@ function FolderManager() {
   }, []);
 
   const fetchFolders = async () => {
-    const res = await axios.get(`${API_BASE}/folders`);
-    setFolders(res.data);
+    try {
+      const res = await axios.get(`${API_BASE}/folders`);
+      setFolders(res.data);
+    } catch (error) {
+      console.error('Error fetching folders:', error);
+    }
   };
 
   const handleCreateFolder = async () => {
     if (!folderName) return;
-    await axios.post(`${API_BASE}/folders`, { name: folderName });
-    setFolderName('');
-    fetchFolders();
+    try {
+      await axios.post(`${API_BASE}/folders`, { name: folderName });
+      setFolderName('');
+      fetchFolders();
+    } catch (error) {
+      console.error('Error creating folder:', error);
+    }
   };
 
   const handleFolderSelect = async (folderId) => {
     setSelectedFolderId(folderId);
-    const res = await axios.get(`${API_BASE}/folders/${folderId}`);
-    setFolderContents(res.data.files || []);
+    try {
+      const res = await axios.get(`${API_BASE}/folders/${folderId}`);
+      setFolderContents(res.data.files || []);
+    } catch (error) {
+      console.error('Error loading folder contents:', error);
+    }
   };
 
-  const onDrop = async (acceptedFiles) => {
-    if (!selectedFolderId || acceptedFiles.length === 0) return;
+  const handleFileChange = async (event) => {
+    if (!selectedFolderId) return;
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
 
     const formData = new FormData();
-    acceptedFiles.forEach(file => formData.append('files', file));
+    files.forEach(file => formData.append('files', file));
 
-    await axios.post(`${API_BASE}/folders/${selectedFolderId}/upload`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-
-    handleFolderSelect(selectedFolderId); // Refresh folder contents
+    try {
+      await axios.post(`${API_BASE}/folders/${selectedFolderId}/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      handleFolderSelect(selectedFolderId); // Refresh contents
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
   };
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
     <div className="p-4 max-w-3xl mx-auto">
@@ -66,7 +80,7 @@ function FolderManager() {
 
       <div className="flex space-x-4">
         <div className="w-1/3 border p-2">
-          <h2 className="font-semibold">Folders</h2>
+          <h2 className="font-semibold mb-2">Folders</h2>
           <ul>
             {folders.map(folder => (
               <li
@@ -81,20 +95,22 @@ function FolderManager() {
         </div>
 
         <div className="w-2/3 border p-2">
-          <h2 className="font-semibold">Folder Contents</h2>
+          <h2 className="font-semibold mb-2">Folder Contents</h2>
 
           {selectedFolderId ? (
             <>
-              <div
-                {...getRootProps()}
-                className="border-dashed border-2 border-gray-400 p-4 text-center my-2 cursor-pointer"
-              >
-                <input {...getInputProps()} />
-                {isDragActive ? (
-                  <p>Drop the files here ...</p>
-                ) : (
-                  <p>Drag & drop some files here, or click to select</p>
-                )}
+              <div className="mb-4">
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-gray-500
+                             file:mr-4 file:py-2 file:px-4
+                             file:rounded-full file:border-0
+                             file:text-sm file:font-semibold
+                             file:bg-blue-50 file:text-blue-700
+                             hover:file:bg-blue-100"
+                />
               </div>
 
               <ul>
