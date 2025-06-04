@@ -16,13 +16,8 @@ const file_controller = require( "../controllers/file.controller"  );
 // const upload = multer( { storage } );
 const upload = multer({ dest: 'uploads/' });
 
-// router.post( "/upload", file_controller.uploadFileUp );
-router.post('/upload', upload.single('file'), (req, res) => {
-    res.json({ message: 'File uploaded', file: req.file.originalname });
-});
-
-// router.post( "/upload", upload.single( "file", file_controller.uploadFile ) );
-// router.get( "/folder/:folderId", file_controller.getFiles );
+router.post('/upload', upload.single('file'), file_controller.uploadFile );
+router.get( "/folder/:folderId", file_controller.getFiles );
 
 module.exports = router;
 
