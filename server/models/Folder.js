@@ -32,10 +32,10 @@ const { v4: uuidv4 } = require('uuid');
 
 const FolderSchema  =  new mongoose.Schema( {
     Folderid: {
-    type: String,
-    unique: true,
-    sparse: true, // important to allow multiple null values
-    default: uuidv4, // auto-generate if not provided
+        type: String,
+        unique: true,
+        sparse: true, // important to allow multiple null values
+        default: uuidv4, // auto-generate if not provided
     },
     name: {
         type: String,

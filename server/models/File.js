@@ -46,7 +46,7 @@ const mongoose = require( "mongoose" );
 
 const FileSchema = new mongoose.Schema( {
     name: { type: String, required: true },
-    folder: {  type: mongoose.Schema.Types.ObjectId, ref: "folder", required: true },
+    folder: {  type: String, ref: "folder", required: true },
     filePath:  { type: String, required: true },
     mimetype: { type: String },
     size: { type: Number },
