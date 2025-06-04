@@ -3,7 +3,7 @@ const File = require( "../models/File"  );
 exports.uploadFile = async( req, res )  => {
     
     res.status( 200 ).json( {
-        message: "Test"
+        message: "Nsengiyunva"
     } );
     // const { folderId } = req.body;
     // if( !req.file )  return res.status( 400 ).json( {
@@ -34,9 +34,3 @@ exports.getFiles = async (  req, res )  => {
         res.status( 500 ).json( { error: err.message } )
     }
 } 
-
-exports.uploadFileUp = async  ( req, res )  => {
-    res.json( {
-        "message": req.file.originalname
-    } );
-}
