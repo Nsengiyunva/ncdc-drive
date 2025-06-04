@@ -33,3 +33,9 @@ exports.getFiles = async (  req, res )  => {
         res.status( 500 ).json( { error: err.message } )
     }
 } 
+
+exports.test_file_controller = async  ( req, res )  => {
+    res.json( {
+        "message": "File  Test"
+    } );
+}
