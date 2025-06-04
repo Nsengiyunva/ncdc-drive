@@ -34,8 +34,8 @@ exports.getFiles = async (  req, res )  => {
     }
 } 
 
-exports.test_file_controller = async  ( req, res )  => {
+exports.uploadFileUp = async  ( req, res )  => {
     res.json( {
-        "message": "File  Test"
+        "message": req.file.originalname
     } );
 }
