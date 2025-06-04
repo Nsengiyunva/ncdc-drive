@@ -50,7 +50,12 @@ const FileSchema = new mongoose.Schema( {
     filePath:  { type: String, required: true },
     mimetype: { type: String },
     size: { type: Number },
-    createdAt: { type: Date, default: Date.now }
+    createdAt: { type: Date, default: Date.now },
+    fileid: {
+        type: String,
+        unique: true,
+        required: true
+    },
 } );
 
 module.exports = new mongoose.model( "File", FileSchema );

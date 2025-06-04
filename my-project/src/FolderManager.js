@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FolderOpen, Upload } from 'lucide-react'; // Optional: lucide-react icons
 
-const API_BASE = 'https://apirepository.ncdc.go.ug/api'; // Change to match your API URL
+const API_BASE = 'https://apirepository.ncdc.go.ug/api';
 
 function FolderManager() {
   const [folders, setFolders] = useState([]);
@@ -23,13 +24,13 @@ function FolderManager() {
   };
 
   const handleCreateFolder = async () => {
-    if (!folderName) return;
+    if (!folderName) return alert( "Please add a folder name before proceeding..." );
     try {
       await axios.post(`${API_BASE}/folders`, { name: folderName });
       setFolderName('');
       fetchFolders();
     } catch (error) {
-      console.error('Error creating folder:', error);
+      console.error(  'Error creating folder:', error  );
     }
   };
 
@@ -43,88 +44,110 @@ function FolderManager() {
     }
   };
 
-  const handleFileChange = async (event) => {
-    if (!selectedFolderId) return;
-    const files = Array.from(event.target.files);
-    if (files.length === 0) return;
+  const handleFileChange = async ( evt ) => {
+    if (!selectedFolderId) return alert("No folder has been selected yet.");
+    console.log( selectedFolderId )
+    console.log( evt.target.files?.[ 0 ] )
+    let file =  evt.target.files?.[ 0 ]
+    // const files = Array.from(event.target.files);
+    // if (files.length === 0) return;
 
     const formData = new FormData();
-    files.forEach(file => formData.append('files', file));
+    formData.append( 'folderId', selectedFolderId );
+    formData.append( 'file', file )
+    // files.forEach(file => formData.append('files', file));
 
     try {
-      await axios.post(`${API_BASE}/folders/${selectedFolderId}/upload`, formData, {
+      await axios.post(`${API_BASE}/files/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      handleFolderSelect(selectedFolderId); // Refresh contents
+      handleFolderSelect(selectedFolderId);
     } catch (error) {
       console.error('Error uploading files:', error);
     }
   };
 
+
+  let selected_folder =  folders.filter( folder =>  folder._id  === selectedFolderId  )?.[ 0 ]?.name;
+
+  // console.log( "folder", selected_folder )
+
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-xl font-bold mb-4">Folder Manager</h1>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <header className="mb-6 flex justify-between items-center">
+        <h1 className="text-2xl font-semibold text-gray-800">Drive Clone</h1>
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={folderName}
+            onChange={(e) => setFolderName(e.target.value)}
+            placeholder="New folder name"
+            className="border rounded px-3 py-2 text-sm"
+          />
+          <button
+            onClick={handleCreateFolder}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded"
+          >
+            Create Folder
+          </button>
+        </div>
+      </header>
 
-      <div className="mb-4">
-        <input
-          type="text"
-          value={folderName}
-          onChange={(e) => setFolderName(e.target.value)}
-          placeholder="New folder name"
-          className="border p-2 mr-2"
-        />
-        <button onClick={handleCreateFolder} className="bg-blue-600 text-white px-4 py-2 rounded">
-          Create Folder
-        </button>
-      </div>
-
-      <div className="flex space-x-4">
-        <div className="w-1/3 border p-2">
-          <h2 className="font-semibold mb-2">Folders</h2>
-          <ul>
+      <div className="grid grid-cols-12 gap-4">
+        {/* Sidebar */}
+        <div className="col-span-3 bg-white shadow-sm rounded-lg p-4">
+          <h2 className="text-sm font-medium text-gray-700 mb-2">Folders</h2>
+          <ul className="space-y-2">
             {folders.map(folder => (
               <li
                 key={folder._id}
                 onClick={() => handleFolderSelect(folder._id)}
-                className={`cursor-pointer p-1 ${folder._id === selectedFolderId ? 'bg-gray-200' : ''}`}
+                className={`flex items-center gap-2 cursor-pointer px-3 py-2 rounded-md transition ${
+                  folder._id === selectedFolderId ? 'bg-blue-100 text-blue-700' : 'hover:bg-gray-100'
+                }`}
               >
-                {folder.name}
+                <FolderOpen size={16} />
+                <span className="text-sm">{folder.name}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="w-2/3 border p-2">
-          <h2 className="font-semibold mb-2">Folder Contents</h2>
+        {/* Main Content */}
+        <div className="col-span-9 bg-white shadow-sm rounded-lg p-6">
+          <h2 className="text-lg font-medium text-gray-800 mb-4">
+            {`Folder Contents  - ${selected_folder ?  selected_folder : ""}`}
+          </h2>
 
           {selectedFolderId ? (
             <>
-              <div className="mb-4">
-                <input
-                  type="file"
-                  multiple
-                  onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500
-                             file:mr-4 file:py-2 file:px-4
-                             file:rounded-full file:border-0
-                             file:text-sm file:font-semibold
-                             file:bg-blue-50 file:text-blue-700
-                             hover:file:bg-blue-100"
-                />
+              <div className="mb-6">
+                <label className="flex items-center gap-2 cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-md w-max">
+                  <Upload size={16} />
+                  <span className="text-sm font-medium">Upload Files</span>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </label>
               </div>
 
-              <ul>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {folderContents.map(file => (
-                  <li key={file._id}>
-                    <a href={file.url} target="_blank" rel="noopener noreferrer">
-                      {file.originalName}
+                  <div
+                    key={file._id}
+                    className="border rounded p-2 bg-gray-50 hover:bg-gray-100 transition text-sm"
+                  >
+                    <a href={file.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                      📄 {file.originalName}
                     </a>
-                  </li>
+                  </div>
                 ))}
-              </ul>
+              </div>
             </>
           ) : (
-            <p>Select a folder to view and upload files.</p>
+            <p className="text-gray-600">Select a folder to view and upload files.</p>
           )}
         </div>
       </div>
