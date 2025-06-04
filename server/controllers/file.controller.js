@@ -6,30 +6,20 @@ exports.uploadFile = async( req, res )  => {
         error: "File is required"
     } )
 
-    let payload  =  {
-        name: req.file.originalname,
-        folder: folderId,
-        filePath: req.file.path,
-        mimetype: req.file.mimetype,
-        size: req.file.size
+    try {
+        const file = new File( {
+            name: req.file.originalname,
+            folder: folderId,
+            filePath: req.file.path,
+            mimetype: req.file.mimetype,
+            size: req.file.size
+        } );
+
+        await file.save();
+        res.status( 201 ).json( file );
+    } catch (err) {
+        res.status( 500 ).json( { error: err.message } );
     }
-
-    res.status( 200  ).json( payload );
-
-    // try {
-    //     const file = new File( {
-    //         name: req.file.originalname,
-    //         folder: folderId,
-    //         filePath: req.file.path,
-    //         mimetype: req.file.mimetype,
-    //         size: req.file.size
-    //     } );
-
-    //     await file.save();
-    //     res.status( 201 ).json( file );
-    // } catch (err) {
-    //     res.status( 500 ).json( { error: err.message } );
-    // }
 }
 
 exports.getFiles = async (  req, res )  => {
