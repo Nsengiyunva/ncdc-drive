@@ -1,4 +1,5 @@
 const File = require( "../models/File"  );
+const { v4: uuidv4 } = require('uuid');
 
 exports.uploadFile = async( req, res )  => {
     const { folderId } = req.body;
@@ -12,7 +13,8 @@ exports.uploadFile = async( req, res )  => {
             folder: folderId,
             filePath: req.file.path,
             mimetype: req.file.mimetype,
-            size: req.file.size
+            size: req.file.size,
+            fileid:  uuidv4()
         } );
 
         await file.save();
