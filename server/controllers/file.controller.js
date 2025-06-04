@@ -1,14 +1,20 @@
 const File = require( "../models/File"  );
 
 exports.uploadFile = async( req, res )  => {
-    
-    res.status( 200 ).json( {
-        message: "Nsengiyunva"
-    } );
-    // const { folderId } = req.body;
-    // if( !req.file )  return res.status( 400 ).json( {
-    //     error: "File is required"
-    // } )
+    const { folderId } = req.body;
+    if( !req.file )  return res.status( 400 ).json( {
+        error: "File is required"
+    } )
+
+    let payload  =  {
+        name: req.file.originalname,
+        folder: folderId,
+        filePath: req.file.path,
+        mimetype: req.file.mimetype,
+        size: req.file.size
+    }
+
+    res.status( 200  ).json( payload );
 
     // try {
     //     const file = new File( {
