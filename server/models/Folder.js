@@ -30,6 +30,12 @@
 const mongoose = require( "mongoose" );
 
 const FolderSchema  =  new mongoose.Schema( {
+    Folderid: {
+    type: String,
+    unique: true,
+    sparse: true, // important to allow multiple null values
+    default: uuidv4, // auto-generate if not provided
+    },
     name: {
         type: String,
         required: true
@@ -43,6 +49,6 @@ const FolderSchema  =  new mongoose.Schema( {
         type: Date,
         default: Date.now
     }
-}  )
+}  );
 
 module.exports  = mongoose.model( "Folder", FolderSchema );

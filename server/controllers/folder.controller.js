@@ -1,9 +1,12 @@
 const Folder = require( "../models/Folder" );
+const { v4: uuidv4 } = require('uuid');
+
 
 exports.createFolder = async ( req, res ) => {
     const { name, parent } = req.body
     try  {
         const folder = new Folder( {
+            Folderid: uuidv4(), 
             name, 
             parent: parent || null
         } )
