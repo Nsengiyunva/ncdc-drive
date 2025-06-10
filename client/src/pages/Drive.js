@@ -93,9 +93,16 @@ export default function Drive() {
                 <FileItem key={"1234"} file={{ name: "Kent",}} />
               )
             } )} */}
-            <div className="">
-              test
-            </div>
+            {/* {items.files?.length} */}
+            {items.files?.map( record => {
+              console.log( record )
+              return (
+                <div key={record._id} className="p-2 border bg-red-500 w-20 h-20">
+                  {record?.name}
+                </div>
+              )
+            } )}
+            
           </>
         )}
 
