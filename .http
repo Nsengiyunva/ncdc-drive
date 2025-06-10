@@ -1,0 +1,2 @@
+# post a folder
+GET https://apirepository.ncdc.go.ug/api/folders
