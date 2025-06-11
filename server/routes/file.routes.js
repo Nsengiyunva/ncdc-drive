@@ -19,6 +19,11 @@ const upload = multer( { storage } );
 router.post('/upload', upload.single('file'), file_controller.uploadFile );
 router.get( "/folder/:folderId", file_controller.getFiles );
 
+routter.get('/:filename', (req, res) => {
+  const filePath = path.join(__dirname, 'uploads', req.params.filename);
+  res.sendFile(filePath);
+});
+
 module.exports = router;
 
 

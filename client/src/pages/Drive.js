@@ -48,8 +48,6 @@ export default function Drive() {
     fetchFiles( folderId );
   }
 
-  // console.log( 'we are here+', currentFolderId );
-
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">My Drive</h1>
