@@ -8,11 +8,14 @@ import {
 import FolderItem from '../components/FolderItem';
 import FileItem from '../components/FileItem';
 import UploadModal from '../components/UploadModal';
+import FilePrev from '../components/FilePrev'
 
 export default function Drive() {
   const [currentFolderId, setCurrentFolderId] = useState(null);
   const [items, setItems] = useState({ folders: [], files: [] });
   const [folderName, setFolderName] = useState([]);
+  const [ selectedFile, setSelectedFile ] = useState( null );
+
 
   const fetchItems = async () => {
     const res = await getFoldersAndFiles(currentFolderId);
@@ -46,6 +49,10 @@ export default function Drive() {
   const handleClickFolder = async ( folderId ) => {
     setCurrentFolderId( folderId )
     fetchFiles( folderId );
+  }
+
+  const handleDisplayFile = async ( file ) => {
+    window.open( 'https://apirepository.ncdc.go.ug/uploads/' + file, '_blank', 'noopener,noreferrer');
   }
 
   return (
@@ -93,18 +100,19 @@ export default function Drive() {
             } )} */}
             {/* {items.files?.length} */}
             {items.files?.map( record => {
-              console.log( record )
+             let actual_file = record?.filePath.split("/");
+             console.log( actual_file?.[ 1 ] )
+             console.log( record )
               return (
-                <div key={record._id} className="p-2 border bg-red-500 w-20 h-20">
+                <div key={record._id} className="p-2 border bg-red-500 w-20 h-20" onClick={() => handleDisplayFile( actual_file?.[ 1 ] )}>
                   {record?.name}
                 </div>
               )
             } )}
-            
+
+            {/* {selectedFile && <FilePrev filename={selectedFile} />} */}
           </>
         )}
-
-       
       </div>
     </div>
   );
