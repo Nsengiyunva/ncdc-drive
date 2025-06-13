@@ -152,7 +152,7 @@ export default function Drive( {} ) {
     const handleUpload = async ( parentId ) => {
       let size = parseInt( file?.[ 0 ].size / 1024 );
       if( size > 1024 ) {
-        return alert( "File size appears to be too big to be uploaded. Please compress file and try again."  )
+        return alert( `File size:${size}  appears to be too big to be uploaded. Please compress file and try again.`  )
       }
       const formData = new FormData();
 
