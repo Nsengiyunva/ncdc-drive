@@ -6,10 +6,7 @@ const api = axios.create({
 });
 
 export const getFoldersAndFiles = ( parentId = '' ) => {
-  // if( parentId ) {
   return api.get(`/folders/`);
-  // }
-  // return api.get(`/folders`);
 }
 
 export const getFiles = ( parentId = '' ) => {
