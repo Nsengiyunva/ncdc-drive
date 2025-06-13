@@ -150,6 +150,10 @@ export default function Drive( {} ) {
     };
 
     const handleUpload = async ( parentId ) => {
+      let size = parseInt( file?.[ 0 ].size / 1024 );
+      if( size > 1024 ) {
+        return alert( "File size appears to be too big to be uploaded. Please compress file and try again."  )
+      }
       const formData = new FormData();
 
       formData.append('file', file?.[ 0 ]);
@@ -277,7 +281,7 @@ export default function Drive( {} ) {
 
       {fetching && ( <div>{`Fetching...`}</div>)}
 
-      <div class="grid gap-5 grid-cols-[repeat(auto-fit,minmax(100px,1fr))] py-2">
+      <div className="grid gap-5 grid-cols-[repeat(auto-fit,minmax(100px,1fr))] py-2">
         
         {items.folders?.map((folder) => {
           return (
