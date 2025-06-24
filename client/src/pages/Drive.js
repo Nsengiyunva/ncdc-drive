@@ -174,7 +174,10 @@ export default function Drive( {} ) {
     else {
        try {
       if (!folderName) return alert( "Folder name cannot be empty." )
-      await createFolder({ name: values?.folder_name, parentId: currentFolderId });
+      await createFolder({ 
+        name: values?.folder_name, 
+        parentId: currentFolderId 
+      } );
         setFolderName('');
         fetchItems();
         setIsModalOpen( false )

@@ -46,6 +46,9 @@ const mongoose = require( "mongoose" );
 
 const FileSchema = new mongoose.Schema( {
     name: { type: String, required: true },
+    referenceID: { type: Number },
+    userID: { type: Number },
+    tag: { type: String },
     folder: {  type: String, ref: "folder", required: true },
     filePath:  { type: String, required: true },
     mimetype: { type: String },
