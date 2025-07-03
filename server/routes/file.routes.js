@@ -1,6 +1,7 @@
 const express = require( "express" );
 const multer = require( "multer" );
 const path = require( "path" );
+const fs = require('fs');
 const router = express.Router();
 
 
@@ -14,14 +15,35 @@ const storage = multer.diskStorage( {
 } );
 
 const upload = multer( { storage } );
-// const upload = multer({ dest: 'uploads/' });
 
 router.post('/upload', upload.single('file'), file_controller.uploadFile );
 router.get( "/folder/:folderId", file_controller.getFiles );
 
+router.get( "/documents/:userID", file_controller.getFilesByUserId );
+
 router.get('/:filename', (req, res) => {
   const filePath = path.join(__dirname, 'uploads', req.params.filename);
   res.sendFile(filePath);
+});
+
+router.post('/replace-file', upload.single('file'), (req, res) => {
+  const newFile = req.file;
+  const oldFilePath = req.body.oldfilepath; // Full path or relative
+
+  if (!newFile) return res.status(400).send('No file uploaded');
+
+  // Delete the old file
+  if (oldFilePath && fs.existsSync(oldFilePath)) {
+    fs.unlink(oldFilePath, (err) => {
+      if (err) console.error('Failed to delete old file:', err);
+      else console.log('Old file deleted');
+    });
+  }
+
+  return res.json({
+    message: 'File replaced successfully',
+    filePath: newFile.path,
+  });
 });
 
 module.exports = router;

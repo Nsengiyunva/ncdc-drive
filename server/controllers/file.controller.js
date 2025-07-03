@@ -35,3 +35,14 @@ exports.getFiles = async (  req, res )  => {
         res.status( 500 ).json( { error: err.message } )
     }
 } 
+
+exports.getFilesByUserId = async ( req, res )  => {
+  try {
+    const files = await File.find({ 
+        folder: "685abbc21501e1b110c63e8c",
+        userID: req.params.userID });
+    res.json( files );
+  } catch (err) {
+     res.status( 500 ).json( { error: err.message } )
+  }
+}
