@@ -144,11 +144,12 @@ exports.deleteFile = async ( req, res ) => {
     }
 
     // // Delete record from MongoDB
-    await record.deleteOne();
+    let result = await record.deleteOne();
 
     res.json( {
         record,
-        path: fullPath
+        path: fullPath,
+        result
     } );
   } catch (err) {
     console.error(err);
