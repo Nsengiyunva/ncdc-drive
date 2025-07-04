@@ -100,7 +100,7 @@ exports.replaceFile = async ( req, res ) => {
       }
 
       // 3. Delete the document from MongoDB
-      await File.findByIdAndDelete(req.params.id);
+      await File.findByIdAndDelete(req.body.id);
     //   res.json({ message: 'File deleted successfully.' });
     
     //upload a new file
