@@ -26,25 +26,7 @@ router.get('/:filename', (req, res) => {
   res.sendFile(filePath);
 });
 
-router.post('/replace-file', upload.single('file'), (req, res) => {
-  const newFile = req.file;
-  const oldFilePath = req.body.oldfilepath; // Full path or relative
-
-  if (!newFile) return res.status(400).send('No file uploaded');
-
-  // Delete the old file
-  if (oldFilePath && fs.existsSync(oldFilePath)) {
-    fs.unlink(oldFilePath, (err) => {
-      if (err) console.error('Failed to delete old file:', err);
-      else console.log('Old file deleted');
-    });
-  }
-
-  return res.json({
-    message: 'File replaced successfully',
-    filePath: newFile.path,
-  });
-});
+router.post('/replace-file', upload.single('file'), file_controller.replaceFile );
 
 module.exports = router;
 

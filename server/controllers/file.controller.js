@@ -46,3 +46,41 @@ exports.getFilesByUserId = async ( req, res )  => {
      res.status( 500 ).json( { error: err.message } )
   }
 }
+
+exports.replaceFile = async ( req, res ) => {
+    const newFile = req.file;
+    const oldFilePath = req.body.oldfilepath; // Full path or relative
+
+    if (!newFile) return res.status(400).send('No file uploaded');
+
+    // Delete the old file
+    if (oldFilePath && fs.existsSync(oldFilePath)) {
+        fs.unlink(oldFilePath, (err) => {
+        if (err) console.error('Failed to delete old file:', err);
+        else console.log('Old file deleted');
+        });
+    }
+
+    //insert new file in the db
+    try {
+        const file = new File( {
+            name: newFile?.originalname,
+            folder: req.body.folderId,
+            filePath: newFile?.path,
+            mimetype: newFile?.mimetype,
+            size: newFile?.size,
+            fileid:  uuidv4(),
+            referenceID: req.body.referenceID,
+            userID: req.body.userID,
+            tag: req.body.tag
+        } );
+
+        await file.save();
+        return res.json({
+            message: 'File replaced successfully',
+            filePath: newFile.path,
+        } );
+    } catch (error) {
+        res.status( 500 ).json( { error: err.message } );
+    }
+}

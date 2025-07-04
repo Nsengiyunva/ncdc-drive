@@ -1,2 +1,2 @@
 # post a folder
-GET https://apirepository.ncdc.go.ug/api/folders
+GET https://apirepository.ncdc.go.ug/api/documents/
