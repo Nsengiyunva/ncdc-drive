@@ -1,5 +1,6 @@
 const File = require( "../models/File"  );
 const { v4: uuidv4 } = require('uuid');
+const fs = require('fs');
 
 exports.uploadFile = async( req, res )  => {
     const { folderId, referenceID, userID, tag } = req.body;
