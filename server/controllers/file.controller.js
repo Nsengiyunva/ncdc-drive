@@ -127,3 +127,27 @@ exports.replaceFile = async ( req, res ) => {
         res.status(500).json( error );
   }
 }
+
+exports.deleteFile = async ( req, res ) => {
+    try {
+    const file = await File.findById(req.params.id);
+
+    // if (!file) {
+    //   return res.status(404).json({ error: 'File not found in database' });
+    // }
+
+    // // Delete file from filesystem
+    // const fullPath = path.join(__dirname, '..', file.filePath);
+    // if (fs.existsSync(fullPath)) {
+    //   fs.unlinkSync(fullPath);
+    // }
+
+    // // Delete record from MongoDB
+    // await file.deleteOne();
+
+    res.json( file );
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error });
+  }
+}
