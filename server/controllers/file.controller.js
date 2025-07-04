@@ -49,21 +49,61 @@ exports.getFilesByUserId = async ( req, res )  => {
 }
 
 exports.replaceFile = async ( req, res ) => {
-    const newFile = req.file;
-    const oldFilePath = req.body.oldfilepath; // Full path or relative
+    // const newFile = req.file;
+    // const oldFilePath = req.body.oldfilepath; // Full path or relative
 
-    if (!newFile) return res.status(400).send('No file uploaded');
+    // if (!newFile) return res.status(400).send('No file uploaded');
 
-    // Delete the old file
-    if (oldFilePath && fs.existsSync(oldFilePath)) {
-        fs.unlink(oldFilePath, (err) => {
-        if (err) console.error('Failed to delete old file:', err);
-        else console.log('Old file deleted');
-        });
+    // // Delete the old file
+    // if (oldFilePath && fs.existsSync(oldFilePath)) {
+    //     fs.unlink(oldFilePath, (err) => {
+    //     if (err) console.error('Failed to delete old file:', err);
+    //     else console.log('Old file deleted');
+    //     });
+    // }
+
+    // //insert new file in the db
+    // try {
+    //     const file = new File( {
+    //         name: req.file.originalname,
+    //         folder: req.body.folderId,
+    //         filePath: req.file.path,
+    //         mimetype: req.file.mimetype,
+    //         size: req.file.size,
+    //         fileid:  uuidv4(),
+    //         referenceID: req.body.referenceID,
+    //         userID: req.body.userID,
+    //         tag: req.body.tag
+    //     } );
+
+    //     await file.save();
+    //     return res.json({
+    //         message: 'File replaced successfully',
+    //         filePath: newFile.path,
+    //     } );
+    // } catch (error) {
+    //     res.status( 500 ).json( { error: err.message } );
+    // }
+
+    try {
+    // 1. Find the file in MongoDB
+    const file = await File.findById(req.body.id);
+    if (!file) {
+      return res.status(404).json({ message: 'File not found in database.' });
     }
 
-    //insert new file in the db
-    try {
+    // 2. Delete the file from the server filesystem
+    const fullPath = path.join(__dirname, file.filePath);
+    fs.unlink(fullPath, async (err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to delete file from server.' });
+      }
+
+      // 3. Delete the document from MongoDB
+      await File.findByIdAndDelete(req.params.id);
+    //   res.json({ message: 'File deleted successfully.' });
+    
+    //upload a new file
         const file = new File( {
             name: req.file.originalname,
             folder: req.body.folderId,
@@ -81,7 +121,9 @@ exports.replaceFile = async ( req, res ) => {
             message: 'File replaced successfully',
             filePath: newFile.path,
         } );
-    } catch (error) {
-        res.status( 500 ).json( { error: err.message } );
-    }
+    });
+  } catch (error) {
+        console.error('Error deleting file:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+  }
 }
