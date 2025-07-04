@@ -103,27 +103,27 @@ exports.replaceFile = async ( req, res ) => {
       await File.findByIdAndDelete(req.body.id);
     //   res.json({ message: 'File deleted successfully.' });
     
-    //upload a new file
-        const file = new File( {
-            name: req.file.originalname,
-            folder: req.body.folderId,
-            filePath: req.file.path,
-            mimetype: req.file.mimetype,
-            size: req.file.size,
-            fileid:  uuidv4(),
-            referenceID: req.body.referenceID,
-            userID: req.body.userID,
-            tag: req.body.tag
-        } );
+    // //upload a new file
+    //     const file = new File( {
+    //         name: req.file.originalname,
+    //         folder: req.body.folderId,
+    //         filePath: req.file.path,
+    //         mimetype: req.file.mimetype,
+    //         size: req.file.size,
+    //         fileid:  uuidv4(),
+    //         referenceID: req.body.referenceID,
+    //         userID: req.body.userID,
+    //         tag: req.body.tag
+    //     } );
 
-        await file.save();
-        return res.json({
+    //     await file.save();
+        res.json({
             message: 'File replaced successfully',
             filePath: newFile.path,
         } );
     });
   } catch (error) {
-        console.error('Error deleting file:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+        // console.error('Error deleting file:', error);
+        res.status(500).json( error );
   }
 }
