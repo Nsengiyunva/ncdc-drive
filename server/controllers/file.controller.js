@@ -1,4 +1,5 @@
 const File = require( "../models/File"  );
+const path = require( "path" );
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
@@ -132,21 +133,22 @@ exports.deleteFile = async ( req, res ) => {
     try {
     const record = await File.findById(req.params.id);
 
-    // if (!file) {
-    //   return res.status(404).json({ error: 'File not found in database' });
-    // }
+    if (!record) {
+      return res.status(404).json({ error: 'File not found in database' });
+    }
 
-    // // Delete file from filesystem
-    // const fullPath = path.join(__dirname, '..', file.filePath);
-    // if (fs.existsSync(fullPath)) {
-    //   fs.unlinkSync(fullPath);
-    // }
+    // Delete file from filesystem
+    const fullPath = path.join(__dirname, '..', record.filePath);
+    if (fs.existsSync(fullPath)) {
+      fs.unlinkSync(fullPath);
+    }
 
     // // Delete record from MongoDB
-    // await file.deleteOne();
+    await record.deleteOne();
 
     res.json( {
-        record
+        record,
+        path: fullPath
     } );
   } catch (err) {
     console.error(err);
