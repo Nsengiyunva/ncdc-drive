@@ -64,11 +64,11 @@ exports.replaceFile = async ( req, res ) => {
     //insert new file in the db
     try {
         const file = new File( {
-            name: newFile?.originalname,
+            name: req.file.originalname,
             folder: req.body.folderId,
-            filePath: newFile?.path,
-            mimetype: newFile?.mimetype,
-            size: newFile?.size,
+            filePath: req.file.path,
+            mimetype: req.file.mimetype,
+            size: req.file.size,
             fileid:  uuidv4(),
             referenceID: req.body.referenceID,
             userID: req.body.userID,
