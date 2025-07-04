@@ -28,7 +28,7 @@ router.get('/:filename', (req, res) => {
 
 router.post('/replace-file', upload.single('file'), file_controller.replaceFile );
 
-router.delete('/files/:id', file.controller.deleteFiles);
+router.delete('/files/:id', file_controller.deleteFile);
 
 module.exports = router;
 
