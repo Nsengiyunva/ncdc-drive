@@ -5,6 +5,7 @@ import TextFieldIcon from '../components/TextFieldIcon'
 import { Formik } from 'formik'
 import FolderItem from '../components/FolderItem';
 import FileItem from '../components/FileItem'
+import fixture_data from './fixtures'
 
 import {
   getFoldersAndFiles,
@@ -17,6 +18,8 @@ import { FaFile } from 'react-icons/fa';
  let user = JSON.parse( localStorage.getItem( "user" ) )
 
 export default function Drive( {} ) {
+
+  // let { data } = fixture_data
  
   const [ isModalOpen, setIsModalOpen ] = useState( false );
   const [ isUploading, setUploading ] = useState( false )
@@ -61,6 +64,8 @@ export default function Drive( {} ) {
       formData.append('folderId', parentId || '');
       formData.append('department', user?.department || '' );
       formData.append('unit', user?.unit || '');
+      formData.append( "created_by", user?.id )
+      formData.append( "organisation", user?.organisation )
 
       await uploadFile(formData);
       setUploading( false )
@@ -81,7 +86,9 @@ export default function Drive( {} ) {
         name: values?.folder_name, 
         parentId: currentFolderId,
         department: user?.department,
-        unit: user?.unit
+        unit: user?.unit,
+        created_by: user?.id,
+        organisation: user?.organisation
       } );
         setFolderName('');
         fetchItems();
@@ -103,6 +110,17 @@ export default function Drive( {} ) {
     setItems( { files: res.data } ); 
   }
 
+  const handleFilterType = result => {
+    switch( user?.role?.toUpperCase() ) {
+      case "ADMIN":
+        return result?.organisation === "NCDC"
+      case "STAFF":
+        return !result?.department  && result?.organisation === "NCDC" && result?.department === user?.department && result?.unit === user?.unit;
+        default:
+          return;
+    }
+  }
+
  if( currentFolderId ) {
     return (
     <div className="flex">
@@ -112,7 +130,7 @@ export default function Drive( {} ) {
 
         <div className="flex flex-row">
           <div className="text-base mx-2 flex items-center justify-center cursor-pointer" onClick={() => setCurrentFolderId( null )}>
-            Back
+            {`Back`}
           </div>
           <button onClick={() => setIsModalOpen(true)} className="mx-2 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-500">
             {`Upload A New File`}
@@ -122,7 +140,10 @@ export default function Drive( {} ) {
 
        <div class="grid gap-5 grid-cols-[repeat(auto-fit,minmax(100px,1fr))] py-2">
       
-        {items.files?.filter( record => record?.department === user?.department )?.map( document => {
+        {items.files?.filter( record => {
+          //record?.department === user?.department && record?.unit === user?.unit
+          handleFilterType( record )
+        } )?.map( document => {
           let actual_file = document?.filePath.split("/");
           return (
             <div key={document._id} className="flex flex-col p-1 bg-white border border-gray-500" onClick={() => handleDisplayFile( actual_file?.[ 1 ] )}>
@@ -192,7 +213,7 @@ export default function Drive( {} ) {
       <div className="grid gap-5 grid-cols-[repeat(auto-fit,minmax(100px,1fr))] py-2">
         
         {items.folders?.filter( record => {
-          return record?.department === user?.department
+           handleFilterType( record )
         } )?.map(( folder ) => {
           return (
             <FolderItem

@@ -1,36 +1,15 @@
 import React, { useState } from 'react';
+import fixture_data from './fixtures'
 
 const LoginForm = () => {
+
+  const { staff : data } = fixture_data;
+
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const data = [
-    {
-        department: "ICT_MULTIMEDIA",
-        department_name: "ICT & MULTIMEDIA",
-        unit: "ICT",
-        email: "gilbert.bogere@ncdc.go.ug",
-        title: "Illustrator",
-        password: "gilbert@#NCDC2025"
-    },
-    {
-        department: "ICT_MULTIMEDIA",
-        department_name: "ICT & MULTIMEDIA",
-        unit: "ICT",
-        email: "grace.nuwasasira@ncdc.go.ug",
-        title: "Graphics Designer",
-        password: "grace@#NCDC2025"
-    },
-    {
-        department: "ICT_MULTIMEDIA",
-        department_name: "ICT & MULTIMEDIA",
-        unit: "ICT",
-        email: "hashaka39@ncdc.go.ug",
-        title: "Graphics Designer",
-        password: "hash@#NCDC2025"
-    }
-  ]
+  
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,19 +21,13 @@ const LoginForm = () => {
 
     const { email, password } = formData;
 
-    // Simple validation
+    //validation
     if (!email || !password) {
       setError('Please enter both email and password.');
       return;
     }
-
-    // Example login logic (you can replace with API call)
-    // if (email === 'user@example.com' && password === 'password123') {
-    //   alert('Login successful!');
-    //   // Save token to localStorage or redirect
-    // } else {
-    //   setError('Invalid credentials.');
-    // }
+    
+    //login the user
     let user = data.filter( result => {
         return email === result.email && password === result.password 
     } )
@@ -65,9 +38,9 @@ const LoginForm = () => {
         window.location.reload()
     }
     else {
+        setError('Invalid credentials.')
         return alert( "Your credentials are invalid. You may not login at this moment." )
     }
-    
   };
 
   return (

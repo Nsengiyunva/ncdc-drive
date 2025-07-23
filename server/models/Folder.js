@@ -10,6 +10,8 @@ const FolderSchema  =  new mongoose.Schema( {
     },
     department: { type: String, required: true },
     unit: { type: String, required: true },
+    organisation: { type: String, required: true },
+    created_by: { type: Number, required: true },
     name: {
         type: String,
         required: true

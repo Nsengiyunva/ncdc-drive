@@ -61,6 +61,8 @@ const FileSchema = new mongoose.Schema( {
         unique: true,
         required: true
     },
+    organisation: { type: String, required: true },
+    created_by: { type: Number, required: true },
 } );
 
 module.exports = new mongoose.model( "File", FileSchema );
