@@ -1,106 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import {
-//   getFoldersAndFiles,
-//   createFolder,
-//   uploadFile,
-//   getFiles
-// } from '../api/api';
-// import FolderItem from '../components/FolderItem';
-// import FileItem from '../components/FileItem';
-// import UploadModal from '../components/UploadModal';
-// import { FaFolder } from 'react-icons/fa'; 
-
-
-// export default function Drive() {
-//   const [currentFolderId, setCurrentFolderId] = useState(null);
-//   const [items, setItems] = useState({ folders: [], files: [] });
-//   const [folderName, setFolderName] = useState([]);
-//   const [ selectedFile, setSelectedFile ] = useState( null );
-//   const fetchItems = async () => {
-//     const res = await getFoldersAndFiles(currentFolderId);
-//     setItems( { folders: res.data } );
-//   };
-
-//   const fetchFiles = async ( id ) => {
-//     const res = await getFiles( id );
-//     setItems( { files: res.data } );
-//   }
-
-//   useEffect(() => {
-//     fetchItems();
-//   }, [currentFolderId]);
-
-//   const handleCreateFolder = async () => {
-//     if (!folderName) return;
-//     await createFolder({ name: folderName, parentId: currentFolderId });
-//     setFolderName('');
-//     fetchItems();
-//   }
-
-//   const handleUpload = async (formData) => {
-//     await uploadFile(formData);
-//     if( !currentFolderId ) {
-//       return alert( 'Please choose a folder first before proceeding...'  );
-//     }
-//     fetchFiles( currentFolderId );
-//   }
-//   const handleClickFolder = async ( folderId ) => {
-//     setCurrentFolderId( folderId )
-//     fetchFiles( folderId );
-//   }
-//   const handleDisplayFile = async ( file ) => {
-//     window.open( 'https://apirepository.ncdc.go.ug/uploads/' + file, '_blank', 'noopener,noreferrer');
-//   }
-//   return (
-//     <div className="p-6 max-w-5xl mx-auto">
-//       <h1 className="text-2xl font-bold mb-4">My Drive</h1>
-//       <div className="flex items-center gap-2 mb-4">
-//         <input
-//           className="border px-2 py-1 rounded"
-//           type="text"
-//           placeholder="Folder name"
-//           value={folderName}
-//           onChange={(e) => setFolderName(e.target.value)}
-//         />
-//         <button
-//           onClick={handleCreateFolder}
-//           className="bg-green-600 text-white px-4 py-1 rounded"
-//         >
-//           + Folder
-//         </button>
-//       </div>
-//       <UploadModal onUpload={handleUpload} parentId={currentFolderId} />
-//       <FaFolder size={50} color="#FFA500" />
-//       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
-//         {items.folders?.map((folder) => {
-//           return (
-//             <FolderItem
-//               key={folder._id}
-//               folder={folder}
-//               onClick={() => handleClickFolder( folder._id )}
-//             />
-//           )
-//         }
-//         )}
-
-//         {currentFolderId && (
-//           <>
-//             <p>{`Folder Item: ${currentFolderId}`}</p>
-//             {items.files?.map( record => {
-//              let actual_file = record?.filePath.split("/");
-//               return (
-//                 <div key={record._id} className="p-2 border bg-red-500 w-20 h-20" onClick={() => handleDisplayFile( actual_file?.[ 1 ] )}>
-//                   {record?.name}
-//                 </div>
-//               )
-//             } )}
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
 import React, { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
 import Modal from '../components/Modal';
@@ -117,6 +14,8 @@ import {
 } from '../api/api';
 import { FaFile } from 'react-icons/fa';
 
+ let user = JSON.parse( localStorage.getItem( "user" ) )
+
 export default function Drive( {} ) {
  
   const [ isModalOpen, setIsModalOpen ] = useState( false );
@@ -126,6 +25,7 @@ export default function Drive( {} ) {
   const [ folderName, setFolderName] = useState([]);
   const [file, setFile] = useState( null );
   const [ fetching, setFetching ] = useState( false )
+
 
   useEffect(() => {
     if(!currentFolderId) {
@@ -150,7 +50,6 @@ export default function Drive( {} ) {
     };
 
     const handleUpload = async ( parentId ) => {
-      let user = JSON.parse( localStorage.getItem( "user" ))
 
       let size = parseInt( file?.[ 0 ].size / 1024 );
       if( size > 1024 ) {
@@ -170,7 +69,6 @@ export default function Drive( {} ) {
     }
 
   const handleSubmit = async ( values ) => {
-    let user = JSON.parse( localStorage.getItem( "user" ))
     setUploading( true )
 
     if( currentFolderId && currentFolderId?.length > 0 ) {
@@ -224,7 +122,7 @@ export default function Drive( {} ) {
 
        <div class="grid gap-5 grid-cols-[repeat(auto-fit,minmax(100px,1fr))] py-2">
       
-        {items.files?.map( document => {
+        {items.files?.filter( record => record?.department === user?.department )?.map( document => {
           let actual_file = document?.filePath.split("/");
           return (
             <div key={document._id} className="flex flex-col p-1 bg-white border border-gray-500" onClick={() => handleDisplayFile( actual_file?.[ 1 ] )}>
@@ -293,7 +191,9 @@ export default function Drive( {} ) {
 
       <div className="grid gap-5 grid-cols-[repeat(auto-fit,minmax(100px,1fr))] py-2">
         
-        {items.folders?.map((folder) => {
+        {items.folders?.filter( record => {
+          return record?.department === user?.department
+        } )?.map(( folder ) => {
           return (
             <FolderItem
               key={folder._id}
