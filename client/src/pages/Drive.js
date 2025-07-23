@@ -150,6 +150,8 @@ export default function Drive( {} ) {
     };
 
     const handleUpload = async ( parentId ) => {
+      let user = JSON.parse( localStorage.getItem( "user" ))
+
       let size = parseInt( file?.[ 0 ].size / 1024 );
       if( size > 1024 ) {
         return alert( `File size:${size}  appears to be too big to be uploaded. Please compress file and try again.`  )
@@ -158,6 +160,8 @@ export default function Drive( {} ) {
 
       formData.append('file', file?.[ 0 ]);
       formData.append('folderId', parentId || '');
+      formData.append('department', user?.department || '' );
+      formData.append('unit', user?.unit || '');
 
       await uploadFile(formData);
       setUploading( false )
@@ -166,7 +170,8 @@ export default function Drive( {} ) {
     }
 
   const handleSubmit = async ( values ) => {
-     setUploading( true )
+    let user = JSON.parse( localStorage.getItem( "user" ))
+    setUploading( true )
 
     if( currentFolderId && currentFolderId?.length > 0 ) {
         return handleUpload( currentFolderId )
@@ -176,7 +181,9 @@ export default function Drive( {} ) {
       if (!folderName) return alert( "Folder name cannot be empty." )
       await createFolder({ 
         name: values?.folder_name, 
-        parentId: currentFolderId 
+        parentId: currentFolderId,
+        department: user?.department,
+        unit: user?.unit
       } );
         setFolderName('');
         fetchItems();

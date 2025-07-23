@@ -52,6 +52,8 @@ const FileSchema = new mongoose.Schema( {
     folder: {  type: String, ref: "folder", required: true },
     filePath:  { type: String, required: true },
     mimetype: { type: String },
+    department: { type: String, required: true },
+    unit: { type: String, required: true },
     size: { type: Number },
     createdAt: { type: Date, default: Date.now },
     fileid: {

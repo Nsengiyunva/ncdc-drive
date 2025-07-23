@@ -3,12 +3,14 @@ const Folder = require( "../models/Folder" );
 
 
 exports.createFolder = async ( req, res ) => {
-    const { name, parent } = req.body
+    const { name, parent, department, unit } = req.body
     try  {
         const folder = new Folder( {
             Folderid: uuidv4(), 
             name, 
-            parent: parent || null
+            parent: parent || null,
+            department,
+            unit
         } )
 
         await folder.save();

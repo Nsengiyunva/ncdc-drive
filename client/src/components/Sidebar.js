@@ -11,6 +11,13 @@ const Sidebar = () => {
         <a href="#" className="flex items-center gap-3 p-2 rounded hover:bg-gray-700 transition">
           <FiHome /> Dashboard
         </a>
+        <a onClick={async() => {
+            await localStorage.removeItem( "token")
+            window.location.reload()
+        }  } className="cursor-pointer flex items-center gap-3 p-2 rounded hover:bg-gray-700 transition">
+          <FiHome /> Logout
+        </a>
+
         {/* <a href="#" className="flex items-center gap-3 p-2 rounded hover:bg-gray-700 transition">
           <FiFolder /> Files
         </a>

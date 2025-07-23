@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
 exports.uploadFile = async( req, res )  => {
-    const { folderId, referenceID, userID, tag } = req.body;
+    const { folderId, referenceID, userID, tag, department, unit } = req.body;
     if( !req.file )  return res.status( 400 ).json( {
         error: "File is required"
     } )
@@ -16,6 +16,8 @@ exports.uploadFile = async( req, res )  => {
             filePath: req.file.path,
             mimetype: req.file.mimetype,
             size: req.file.size,
+            department: department,
+            unit: unit,
             fileid:  uuidv4(),
             referenceID: referenceID,
             userID: userID,
